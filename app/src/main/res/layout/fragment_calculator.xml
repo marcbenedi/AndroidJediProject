@@ -4,9 +4,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <LinearLayout
+        android:id="@+id/results"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
+        android:background="@drawable/ripple_effect_clear"
+        android:clickable="true"
         android:elevation="2dp"
         android:orientation="vertical">
 
