@@ -99,7 +99,11 @@ public class Calculator extends Fragment{
     }
 
     private void restoreState(Bundle instance){
+        expression = instance.getString("expression");
+        textAllExpression.setText(expression);
+        scrollView.fullScroll(View.FOCUS_RIGHT);
 
+        textTempResult.setText(String.valueOf(new Tree(expression).eval()));
     }
 
     private void numberPressed(char c){
@@ -323,6 +327,12 @@ public class Calculator extends Fragment{
 
         }
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("expression",expression);
     }
 
 }

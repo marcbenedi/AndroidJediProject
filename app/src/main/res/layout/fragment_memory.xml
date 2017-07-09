@@ -6,6 +6,7 @@
     <pro.marcb.androidjediproject.SupportClass.ResponsiveGridView
         android:id="@+id/game"
         android:rowCount="4"
+        android:background="@android:color/black"
         android:columnCount="3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
