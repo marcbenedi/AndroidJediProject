@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidJediProject.iml" filepath="$PROJECT_DIR$/AndroidJediProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/flipper/flipper.iml" filepath="$PROJECT_DIR$/flipper/flipper.iml" />
     </modules>
   </component>
 </project>

@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import pro.marcb.androidjediproject.fragments.Calculator;
+import pro.marcb.androidjediproject.fragments.Memory;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity
         if(savedInstanceState == null){
             onNavigationItemSelected(navigationView.getMenu().getItem(0));
         }else {
-            setTitle(savedInstanceState.getCharSequence("AppBarTitle"));
+            setTitle(savedInstanceState.getCharSequence("AppBarTitle","NO TITLE FOUND"));
         }
 
     }
@@ -89,29 +90,29 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        Fragment fragment;
+        Fragment fragment = null;
         fragmentTransaction = fragmentManager.beginTransaction();
 
-        if (id == R.id.calculator) {
+        if (id == R.id.nav_calculator) {
             fragment = new Calculator();
-            fragmentTransaction.replace(R.id.frameLayout,fragment);
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            setTitle("Calculator");
+        } else if (id == R.id.nav_memory) {
+            fragment = new Memory();
+            setTitle("Memory");
         }
 
+        fragmentTransaction.replace(R.id.frameLayout,fragment);
         fragmentTransaction.commit();
         item.setChecked(true);
 
         //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putCharSequence("AppBarTitle",getTitle());
     }
 }
