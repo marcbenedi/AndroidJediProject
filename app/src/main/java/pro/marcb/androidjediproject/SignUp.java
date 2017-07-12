@@ -1,11 +1,9 @@
 package pro.marcb.androidjediproject;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,12 +13,13 @@ import android.widget.Toast;
 import pro.marcb.androidjediproject.DB.MyDataBaseHelper;
 import pro.marcb.androidjediproject.SupportClass.Constants;
 
-public class Login extends AppCompatActivity {
+public class SignUp extends AppCompatActivity {
 
-    private final static String TAG ="MainActivity.class";
+
+    private final static String TAG ="SignUpq.class";
 
     private Button logInButton;
-    private TextView signUp;
+    private TextView signUp,textNotAccount,title;
     private EditText usernameTV, passwordTV;
     private SharedPreferences preferences;
     private MyDataBaseHelper myDataBaseHelper;
@@ -32,13 +31,16 @@ public class Login extends AppCompatActivity {
         initUI();
     }
 
+
+
     private void initUI(){
 
         logInButton = (Button) findViewById(R.id.loginButton);
         logInButton.setOnClickListener(loginClick);
+        logInButton.setText("Create");
 
         signUp = (TextView) findViewById(R.id.signUp);
-        signUp.setOnClickListener(signInClick);
+        signUp.setVisibility(View.INVISIBLE);
 
         usernameTV = (EditText) findViewById(R.id.username);
         passwordTV = (EditText) findViewById(R.id.password);
@@ -46,6 +48,12 @@ public class Login extends AppCompatActivity {
         preferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
         myDataBaseHelper = MyDataBaseHelper.getInstance(this);
+
+        textNotAccount = (TextView) findViewById(R.id.no_account);
+        textNotAccount.setVisibility(View.INVISIBLE);
+
+        title = (TextView) findViewById(R.id.title);
+        title.setText("Create a FREE account 100% REAL NO FAKE!");
 
     }
 
@@ -60,34 +68,11 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),"Fill all the fields before", Toast.LENGTH_LONG).show();
             }
             else {
-                String stored_password = myDataBaseHelper.getPassword(username);
-                if (stored_password == null || !stored_password.equals(passowrd)){
-                    Toast.makeText(getApplicationContext(), "Incorrect username or password",Toast.LENGTH_LONG).show();
-                }
-                else {
-                    //TODO: Store user logged in in shared preferences
-                    //intent to MainActivity
-                    //finish this activity
-                }
+
             }
 
         }
     };
-
-    private View.OnClickListener signInClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            //TODO: Intent to sing up activity
-            Intent i = new Intent(getApplicationContext(),SignUp.class);
-            startActivityForResult(i,Constants.SignUpCODE);
-        }
-    };
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        //TODO quan retorni fer set de password i username
-    }
 
     @Override
     protected void onDestroy() {
