@@ -3,6 +3,7 @@ package pro.marcb.androidjediproject;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,6 +31,13 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         initUI();
+
+        String userlogged = preferences.getString(Constants.SHARED_PREFERENCES.USER_LOGGED,null);
+        if (userlogged != null){
+            Intent i = new Intent(this,MainActivity.class);
+            startActivity(i);
+            finish();
+        }
     }
 
     private void initUI(){
@@ -43,9 +51,7 @@ public class Login extends AppCompatActivity {
         usernameTV = (EditText) findViewById(R.id.username);
         passwordTV = (EditText) findViewById(R.id.password);
 
-        preferences = getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-
-        myDataBaseHelper = MyDataBaseHelper.getInstance(this);
+        preferences = getSharedPreferences(Constants.SHARED_PREFERENCES.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
     }
 
@@ -68,6 +74,13 @@ public class Login extends AppCompatActivity {
                     //TODO: Store user logged in in shared preferences
                     //intent to MainActivity
                     //finish this activity
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString(Constants.SHARED_PREFERENCES.USER_LOGGED,username);
+                    editor.apply();
+
+                    Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(i);
+                    finish();
                 }
             }
 
@@ -79,19 +92,34 @@ public class Login extends AppCompatActivity {
         public void onClick(View v) {
             //TODO: Intent to sing up activity
             Intent i = new Intent(getApplicationContext(),SignUp.class);
-            startActivityForResult(i,Constants.SignUpCODE);
+            startActivityForResult(i,Constants.SING_UP_ACTIVITY_RESULT.SignUpCODE);
         }
     };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //TODO quan retorni fer set de password i username
+
+        if (resultCode == RESULT_OK && requestCode == Constants.SING_UP_ACTIVITY_RESULT.SignUpCODE){
+            String user = data.getStringExtra(Constants.SING_UP_ACTIVITY_RESULT.USERNAME_FIELD);
+            String pass = data.getStringExtra(Constants.SING_UP_ACTIVITY_RESULT.PASSWORD_FIELD);
+
+            usernameTV.setText(user);
+            passwordTV.setText(pass);
+        }
+
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        myDataBaseHelper.close();
+    protected void onStop() {
+        super.onStop();
+        //myDataBaseHelper.close();
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        myDataBaseHelper = MyDataBaseHelper.getInstance(this);
     }
 }

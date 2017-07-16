@@ -335,4 +335,8 @@ public class Calculator extends Fragment{
         outState.putString("expression",expression);
     }
 
+    private int max(int a, int b){
+        return a > b? a:b;
+    }
+
 }

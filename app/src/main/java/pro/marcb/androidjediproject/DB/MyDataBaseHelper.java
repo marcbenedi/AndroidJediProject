@@ -9,9 +9,9 @@ import android.util.Log;
 
 public class MyDataBaseHelper extends SQLiteOpenHelper{
 
-    private final String TAG = "MyDataBaseHelper";
+    private static final String TAG = "MyDataBaseHelper";
 
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "MyDataBase.db";
 
 
@@ -43,8 +43,8 @@ public class MyDataBaseHelper extends SQLiteOpenHelper{
     public static MyDataBaseHelper getInstance(Context c){
         if(instance == null){
             instance = new MyDataBaseHelper(c);
-            if (writable == null) writable = instance.getWritableDatabase();
-            if (readable == null) readable = instance.getReadableDatabase();
+            if (writable == null) {writable = instance.getWritableDatabase();Log.v(TAG,"creating writable");}
+            if (readable == null) {readable = instance.getReadableDatabase();Log.v(TAG,"Creating readable");}
         }
         return instance;
     }
@@ -120,6 +120,7 @@ public class MyDataBaseHelper extends SQLiteOpenHelper{
                 //We go here if the cursor is not empty
                 String l = c.getString(c.getColumnIndex(MyDataBaseContract.Users.COLUMN_PASSWORD));
                 returnValue = l;
+                Log.v(TAG,returnValue);
             } while (c.moveToNext());
         }
 

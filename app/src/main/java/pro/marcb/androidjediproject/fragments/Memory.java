@@ -215,8 +215,8 @@ public class Memory extends Fragment implements SeekBar.OnSeekBarChangeListener,
 
         if(fin){
 
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-            final String username = sharedPreferences.getString(Constants.USER_LOGGED,"NO_User_Logged");
+            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+            final String username = sharedPreferences.getString(Constants.SHARED_PREFERENCES.USER_LOGGED,null);
 
             // 1. Instantiate an AlertDialog.Builder with its constructor
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

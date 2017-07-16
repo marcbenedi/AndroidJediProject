@@ -1,5 +1,8 @@
 package pro.marcb.androidjediproject;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import pro.marcb.androidjediproject.SupportClass.Constants;
 import pro.marcb.androidjediproject.fragments.Calculator;
 import pro.marcb.androidjediproject.fragments.Memory;
 
@@ -25,6 +29,8 @@ public class MainActivity extends AppCompatActivity
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
+
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +48,8 @@ public class MainActivity extends AppCompatActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        preferences = getSharedPreferences(Constants.SHARED_PREFERENCES.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -78,7 +86,13 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString(Constants.SHARED_PREFERENCES.USER_LOGGED,null);
+            editor.apply();
+            Intent i = new Intent(getApplicationContext(),Login.class);
+            startActivity(i);
+            finish();
             return true;
         }
 
