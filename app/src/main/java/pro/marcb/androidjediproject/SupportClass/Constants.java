@@ -15,4 +15,8 @@ public final class Constants {
         public static final String PASSWORD_FIELD = "passwordfield";
     }
 
+    public static final class RANKING_PAGE_FRAGMENT {
+        public static final String NUM_CARDS = "numcards";
+    }
+
 }

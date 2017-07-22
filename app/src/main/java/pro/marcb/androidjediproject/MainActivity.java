@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import pro.marcb.androidjediproject.SupportClass.Constants;
 import pro.marcb.androidjediproject.fragments.Calculator;
 import pro.marcb.androidjediproject.fragments.Memory;
+import pro.marcb.androidjediproject.fragments.Ranking;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -113,6 +114,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_memory) {
             fragment = new Memory();
             setTitle("Memory");
+        } else if (id == R.id.nav_ranking) {
+            fragment = new Ranking();
+            setTitle("Ranking");
         }
 
         fragmentTransaction.replace(R.id.frameLayout,fragment);
