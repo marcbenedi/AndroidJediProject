@@ -6,5 +6,5 @@
 
     <item
         android:id="@android:id/background"
-        android:drawable="@color/buttonColor2"/>
+        android:drawable="@color/buttonColor2" />
 </ripple>

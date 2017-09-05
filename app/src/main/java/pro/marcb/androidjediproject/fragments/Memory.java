@@ -8,7 +8,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -19,7 +18,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.material.joanbarroso.flipper.CoolImageFlipper;
 
@@ -33,38 +31,29 @@ import pro.marcb.androidjediproject.SupportClass.ResponsiveGridView;
 
 public class Memory extends Fragment implements SeekBar.OnSeekBarChangeListener, View.OnClickListener {
 
-    private final String TAG ="Memory";
+    private final String TAG = "Memory";
     private final int CONSTANT = 2;
-
+    Drawable back;
     private CoolImageFlipper imageFlipper;
     private ResponsiveGridView responsiveGridView;
-
     private TextView num_columns_display;
     private TextView num_rows_display;
-
     private SeekBar num_rows;
     private SeekBar num_columns;
-
     private Button startGame;
-
     private View configuration;
     private ResponsiveGridView game;
-
     private int lastTagPressed;
     private int tries;
     private int nCards;
     private ArrayList<Integer> colors;
     private ArrayList<Boolean> found;
-
     private MyDataBaseHelper myDataBaseHelper;
-
-    Drawable back;
-
     private boolean waiting;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)  {
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_memory, container, false);
 
@@ -82,7 +71,7 @@ public class Memory extends Fragment implements SeekBar.OnSeekBarChangeListener,
         num_columns_display = (TextView) v.findViewById(R.id.display_num_cols);
         num_rows_display = (TextView) v.findViewById(R.id.display_num_rows);
 
-        num_rows = (SeekBar)v.findViewById(R.id.num_rows);
+        num_rows = (SeekBar) v.findViewById(R.id.num_rows);
         num_columns = (SeekBar) v.findViewById(R.id.num_cols);
 
         num_columns_display.setText(String.valueOf(getNumColumns()));
@@ -104,7 +93,7 @@ public class Memory extends Fragment implements SeekBar.OnSeekBarChangeListener,
 
     }
 
-    private void startGame(){
+    private void startGame() {
 
         configuration.setVisibility(View.GONE);
         game.setVisibility(View.VISIBLE);
@@ -124,20 +113,20 @@ public class Memory extends Fragment implements SeekBar.OnSeekBarChangeListener,
 
         back = getResources().getDrawable(R.drawable.back);
 
-        for(int i = 0; i < nCards; ++i){
-            int id = (int)(Math.random()*(nCards/2));
-            while(Collections.frequency(colors, id) > 1) {
+        for (int i = 0; i < nCards; ++i) {
+            int id = (int) (Math.random() * (nCards / 2));
+            while (Collections.frequency(colors, id) > 1) {
                 id = (int) (Math.random() * (nCards / 2));
-                Log.v(TAG,String.valueOf(id));
+                Log.v(TAG, String.valueOf(id));
             }
             colors.add(id);
             found.add(false);
         }
 
-        for(int i = 0; i < nCards; ++i){
+        for (int i = 0; i < nCards; ++i) {
             ImageView v = new ImageView(getContext());
             v.setOnClickListener(this);
-            v.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+            v.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
             v.setImageDrawable(back);
 
@@ -148,51 +137,58 @@ public class Memory extends Fragment implements SeekBar.OnSeekBarChangeListener,
     }
 
 
-    private int getNumColumns() {return num_columns.getProgress()+CONSTANT;}
-    private int getNumRows() {return num_rows.getProgress()+CONSTANT;}
+    private int getNumColumns() {
+        return num_columns.getProgress() + CONSTANT;
+    }
+
+    private int getNumRows() {
+        return num_rows.getProgress() + CONSTANT;
+    }
 
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        switch (seekBar.getId()){
+        switch (seekBar.getId()) {
             case R.id.num_rows:
-                if (getNumColumns()%2!=0 && progress%2!=0){
+                if (getNumColumns() % 2 != 0 && progress % 2 != 0) {
                     num_rows.setProgress(--progress);
                 }
-                num_rows_display.setText(String.valueOf(progress+CONSTANT));
+                num_rows_display.setText(String.valueOf(progress + CONSTANT));
                 break;
             case R.id.num_cols:
-                if (getNumRows()%2!=0 && progress%2!=0){
+                if (getNumRows() % 2 != 0 && progress % 2 != 0) {
                     num_columns.setProgress(--progress);
                 }
-                num_columns_display.setText(String.valueOf(progress+CONSTANT));
+                num_columns_display.setText(String.valueOf(progress + CONSTANT));
                 break;
         }
     }
 
     @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {}
+    public void onStartTrackingTouch(SeekBar seekBar) {
+    }
+
     @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {}
+    public void onStopTrackingTouch(SeekBar seekBar) {
+    }
 
     @Override
     public void onClick(final View v) {
         int tag = (int) v.getTag();
-
-        if(lastTagPressed==-1 && !found.get(tag) && !waiting){
+        if (lastTagPressed == tag) return;
+        if (lastTagPressed == -1 && !found.get(tag) && !waiting) {
             lastTagPressed = tag;
-            imageFlipper.flipImage(R.color.colorAccent+colors.get(tag)*3000,(ImageView) v);
-        }else if (!waiting && !found.get(tag)
-                && R.color.colorAccent+colors.get(tag)*3000 == R.color.colorAccent+colors.get(lastTagPressed)*3000
-                ){
+            imageFlipper.flipImage(R.color.colorAccent + colors.get(tag) * 3000, (ImageView) v);
+        } else if (!waiting && !found.get(tag)
+                && R.color.colorAccent + colors.get(tag) * 3000 == R.color.colorAccent + colors.get(lastTagPressed) * 3000
+                ) {
             ++tries;
-            found.set(lastTagPressed,true);
-            imageFlipper.flipImage(R.color.colorAccent+colors.get(tag)*3000,(ImageView) v);
+            found.set(lastTagPressed, true);
+            imageFlipper.flipImage(R.color.colorAccent + colors.get(tag) * 3000, (ImageView) v);
             lastTagPressed = -1;
-            found.set(tag,true);
-        }
-        else if (!found.get(tag) && !waiting){
-            imageFlipper.flipImage(R.color.colorAccent+colors.get(tag)*3000,(ImageView) v);
+            found.set(tag, true);
+        } else if (!found.get(tag) && !waiting) {
+            imageFlipper.flipImage(R.color.colorAccent + colors.get(tag) * 3000, (ImageView) v);
             ++tries;
             waiting = true;
             Handler handler = new Handler();
@@ -203,33 +199,37 @@ public class Memory extends Fragment implements SeekBar.OnSeekBarChangeListener,
                     imageFlipper.flipImage(back, (ImageView) v);
                     ImageView v = (ImageView) game.getChildAt(lastTagPressed);
                     lastTagPressed = -1;
-                    imageFlipper.flipImage(back,v);
+                    imageFlipper.flipImage(back, v);
                 }
-            },2000);
+            }, 2000);
         }
 
 
         //See if the game has finished
         boolean fin = true;
-        for (int i = 0; i < found.size();++i){if (!found.get(i)){fin= found.get(i);}}
+        for (int i = 0; i < found.size(); ++i) {
+            if (!found.get(i)) {
+                fin = found.get(i);
+            }
+        }
 
-        if(fin){
+        if (fin) {
 
             SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.SHARED_PREFERENCES.SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
-            final String username = sharedPreferences.getString(Constants.SHARED_PREFERENCES.USER_LOGGED,null);
+            final String username = sharedPreferences.getString(Constants.SHARED_PREFERENCES.USER_LOGGED, null);
 
             // 1. Instantiate an AlertDialog.Builder with its constructor
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
             // 2. Chain together various setter methods to set the dialog characteristics
-            builder.setMessage("Your puntuation is "+String.valueOf(tries))
+            builder.setMessage("Your puntuation is " + String.valueOf(tries))
                     .setTitle("Game finished!");
             builder.setPositiveButton("Finish", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     game.setVisibility(View.GONE);
                     configuration.setVisibility(View.VISIBLE);
-                    myDataBaseHelper.insertScore(username,tries,nCards);
+
                 }
             });
             builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -237,13 +237,13 @@ public class Memory extends Fragment implements SeekBar.OnSeekBarChangeListener,
                 public void onDismiss(DialogInterface dialog) {
                     game.setVisibility(View.GONE);
                     configuration.setVisibility(View.VISIBLE);
-                    myDataBaseHelper.insertScore(username,tries,nCards);
                 }
             });
 
             // 3. Get the AlertDialog from create()
             AlertDialog dialog = builder.create();
             dialog.show();
+            myDataBaseHelper.insertScore(username, tries, nCards);
         }
 
     }

@@ -13,13 +13,7 @@ public class ResponsiveGridView extends ViewGroup {
     private int mRowCount;
     private int mColCount;
 
-    public void setmRowCount(int mRowCount) {this.mRowCount = mRowCount;}
-
-    public void setmColCount(int mColCount) {this.mColCount = mColCount;}
-
-    //public ResponsiveGridView(Context context){super(context, null);}
-
-    public ResponsiveGridView(Context context, AttributeSet attrs){
+    public ResponsiveGridView(Context context, AttributeSet attrs) {
         super(context, attrs, 0);
 
         final TypedArray a = context.obtainStyledAttributes(attrs, new int[]{android.R.attr.rowCount, android.R.attr.columnCount}, 0, 0);
@@ -29,6 +23,16 @@ public class ResponsiveGridView extends ViewGroup {
         mColCount = a.getInt(1, 1);
 
         a.recycle();
+    }
+
+    public void setmRowCount(int mRowCount) {
+        this.mRowCount = mRowCount;
+    }
+
+    //public ResponsiveGridView(Context context){super(context, null);}
+
+    public void setmColCount(int mColCount) {
+        this.mColCount = mColCount;
     }
 //
 //    public ResponsiveGridView(Context context, AttributeSet attrs, int defStyle){
@@ -56,7 +60,7 @@ public class ResponsiveGridView extends ViewGroup {
         final int rowHeight = Math.round((float) (bottom - top - paddingTop - paddingBottom) / mRowCount);
 
         int iRow = 0, iCol = 0;
-        for(int i = 0; i < getChildCount(); ++i){
+        for (int i = 0; i < getChildCount(); ++i) {
             final View child = getChildAt(i);
             //if(child.getVisibility() == View.GONE) continue;
 
@@ -69,7 +73,7 @@ public class ResponsiveGridView extends ViewGroup {
 
             final int childWidth = childRight - childLeft;
             final int childHeight = childBottom - childTop;
-            if(child.getMeasuredWidth() != childWidth || child.getMeasuredHeight() != childHeight){
+            if (child.getMeasuredWidth() != childWidth || child.getMeasuredHeight() != childHeight) {
                 child.measure(MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(childHeight, MeasureSpec.EXACTLY));
             }
             child.layout(childLeft, childTop, childRight, childBottom);

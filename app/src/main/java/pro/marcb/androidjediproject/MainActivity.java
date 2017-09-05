@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,14 +18,16 @@ import android.view.MenuItem;
 
 import pro.marcb.androidjediproject.SupportClass.Constants;
 import pro.marcb.androidjediproject.fragments.Calculator;
+import pro.marcb.androidjediproject.fragments.MediaPlayer;
 import pro.marcb.androidjediproject.fragments.Memory;
+import pro.marcb.androidjediproject.fragments.Profile;
 import pro.marcb.androidjediproject.fragments.Ranking;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Toolbar toolbar;
-    private  DrawerLayout drawer;
+    private DrawerLayout drawer;
     private NavigationView navigationView;
 
     private FragmentManager fragmentManager;
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         //drawer.setDrawerListener(toggle);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
@@ -54,10 +56,10 @@ public class MainActivity extends AppCompatActivity
 
         fragmentManager = getSupportFragmentManager();
 
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             onNavigationItemSelected(navigationView.getMenu().getItem(0));
-        }else {
-            setTitle(savedInstanceState.getCharSequence("AppBarTitle","NO TITLE FOUND"));
+        } else {
+            setTitle(savedInstanceState.getCharSequence("AppBarTitle", "NO TITLE FOUND"));
         }
 
     }
@@ -89,9 +91,9 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
             SharedPreferences.Editor editor = preferences.edit();
-            editor.putString(Constants.SHARED_PREFERENCES.USER_LOGGED,null);
+            editor.putString(Constants.SHARED_PREFERENCES.USER_LOGGED, null);
             editor.apply();
-            Intent i = new Intent(getApplicationContext(),Login.class);
+            Intent i = new Intent(getApplicationContext(), Login.class);
             startActivity(i);
             finish();
             return true;
@@ -117,9 +119,15 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_ranking) {
             fragment = new Ranking();
             setTitle("Ranking");
+        } else if (id == R.id.nav_player) {
+            fragment = new MediaPlayer();
+            setTitle("MediaPlayer");
+        } else if (id == R.id.nav_profile) {
+            fragment = new Profile();
+            setTitle("Profile");
         }
 
-        fragmentTransaction.replace(R.id.frameLayout,fragment);
+        fragmentTransaction.replace(R.id.frameLayout, fragment);
         fragmentTransaction.commit();
         item.setChecked(true);
 
@@ -131,6 +139,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putCharSequence("AppBarTitle",getTitle());
+        outState.putCharSequence("AppBarTitle", getTitle());
     }
 }

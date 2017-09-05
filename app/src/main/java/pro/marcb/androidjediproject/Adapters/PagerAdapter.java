@@ -12,18 +12,18 @@ import pro.marcb.androidjediproject.fragments.RankingPage;
 public class PagerAdapter extends FragmentPagerAdapter {
 
 
-    private String tabTitles[];
+    private ArrayList<String> tabTitles;
     private Fragment tab = null;
 
     private ArrayList<Fragment> fragments;
 
     //creadora
-    public PagerAdapter(FragmentManager fm, String titles[]) {
+    public PagerAdapter(FragmentManager fm, ArrayList<String> titles) {
         super(fm);
-        tabTitles = titles;
+        tabTitles = (ArrayList<String>) titles.clone();
         fragments = new ArrayList<>();
-        for (int i = 0; i < tabTitles.length; ++i){
-            fragments.add(i,null);
+        for (int i = 0; i < tabTitles.size(); ++i) {
+            fragments.add(i, null);
         }
     }
 
@@ -31,23 +31,25 @@ public class PagerAdapter extends FragmentPagerAdapter {
     //crea las tabas, siempre tiene que retornar con el numero de tabs que queremos mostrar
     @Override
     public int getCount() {
-        return tabTitles.length;
+        return tabTitles.size();
     }
 
     //Lanza el fragment asociado con el número de tab
     @Override
     public Fragment getItem(int position) {
-        if (fragments.get(position)==null){
-            fragments.add(position,RankingPage.newInstance(Integer.valueOf(tabTitles[position])));
+        if (fragments.get(position) == null) {
+            fragments.add(position, RankingPage.newInstance(Integer.valueOf(tabTitles.get(position))));
         }
         tab = fragments.get(position);
-        return tab;
+        //return tab;
+        return RankingPage.newInstance(Integer.valueOf(tabTitles.get(position)));
     }
 
     //pone el nombre en cada tab
     @Override
     public CharSequence getPageTitle(int position) {
         // Genera le título en función de la posición
-        return tabTitles[position];
+        return tabTitles.get(position);
     }
 }
+
